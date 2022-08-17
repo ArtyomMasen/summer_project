@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:summer_project/answer.dart';
 
 class Home extends StatefulWidget {
 
@@ -7,6 +8,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  List<Icon> _scoreTracker = [];
+  int _questionIndex = 0;
+  int _totalScore = 0;
+  bool answerWasSelected = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,14 +28,11 @@ class _HomeState extends State<Home> {
           children: [
             Row(
               children: [
-                Icon(
-                  Icons.check_circle,
-                  color: Colors.green,
+                if (_scoreTracker.length == 0)
+                SizedBox(
+                  height: 25.0,
                 ),
-                Icon(
-                  Icons.clear,
-                  color: Colors.red,
-                ),
+                if (_scoreTracker.length > 0) ..._scoreTracker
               ],
             ),
             Container(
@@ -43,7 +46,7 @@ class _HomeState extends State<Home> {
               ),
               child: Center(
                 child: Text(
-                  'This is where questions go',
+                  _questions[_questionIndex]['question'].toString(),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
@@ -53,62 +56,18 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-            InkWell(
-              onTap: () {},
-              child: Container(
-                padding: EdgeInsets.all(15.0),
-                margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 30.0),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: null,
-                  border: Border.all(color: Colors.blue),
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                child: Text(
-                  'This will be an  answer',
-                  style: TextStyle(
-                    fontSize: 15.0,
+            ...(_questions[_questionIndex]['answers']
+            as List<Map<String, dynamic>>)
+                .map(
+                  (answer) => Answer(
+                answerText: answer['answerText'],
+                answerColor: answerWasSelected
+                    ? answer['score']
+                      ? Colors.green
+                      : Colors.red
+                    : null,
+
                   ),
-                ),
-              ),
-            ),
-            InkWell(
-              onTap: () {},
-              child: Container(
-                padding: EdgeInsets.all(15.0),
-                margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 30.0),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: null,
-                  border: Border.all(color: Colors.blue),
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                child: Text(
-                  'This will be an  answer',
-                  style: TextStyle(
-                    fontSize: 15.0,
-                  ),
-                ),
-              ),
-            ),
-            InkWell(
-              onTap: () {},
-              child: Container(
-                padding: EdgeInsets.all(15.0),
-                margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 30.0),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: null,
-                  border: Border.all(color: Colors.blue),
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                child: Text(
-                  'This will be an  answer',
-                  style: TextStyle(
-                    fontSize: 15.0,
-                  ),
-                ),
-              ),
             ),
             SizedBox(height: 20.0),
             ElevatedButton(
